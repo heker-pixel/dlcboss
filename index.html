@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Generator ATS-Friendly</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @media print {
+            .no-print { display: none !important; }
+            body { margin: 0; padding: 0; background: white; }
+            .cv-preview { 
+                box-shadow: none !important; 
+                margin: 0 !important; 
+                padding: 20mm !important;
+                max-width: 100% !important;
+            }
+            * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+        }
+        
+        html { scroll-behavior: smooth; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeIn 0.3s ease-out; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <!-- Header -->
+        <div class="text-center mb-8 no-print">
+            <h1 class="text-4xl font-bold text-slate-800 mb-2">CV Generator ATS-Friendly</h1>
+            <p class="text-slate-600">Buat CV profesional yang mudah dibaca oleh sistem ATS</p>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+            <!-- Form Input -->
+            <div class="space-y-6 no-print">
+                <!-- Data Pribadi -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-200 fade-in">
+                    <div class="flex items-center mb-4">
+                        <div class="w-1 h-8 bg-blue-600 rounded mr-3"></div>
+                        <h2 class="text-2xl font-bold text-slate-800">Data Pribadi</h2>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Lengkap *</label>
+                            <input type="text" id="fullName" value="Budi Santoso" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Posisi yang Dilamar *</label>
+                            <input type="text" id="jobTitle" value="Software Engineer" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Email *</label>
+                                <input type="email" id="email" value="budi.santoso@email.com" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">No. Telepon *</label>
+                                <input type="tel" id="phone" value="+62 812-3456-7890" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Lokasi</label>
+                            <input type="text" id="location" value="Jakarta, DKI Jakarta" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">LinkedIn URL</label>
+                            <input type="url" id="linkedin" value="linkedin.com/in/budisantoso" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ringkasan Profesional -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-200 fade-in">
+                    <div class="flex items-center mb-4">
+                        <div class="w-1 h-8 bg-green-600 rounded mr-3"></div>
+                        <h2 class="text-2xl font-bold text-slate-800">Ringkasan Profesional</h2>
+                    </div>
+                    <textarea id="summary" rows="4" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition">Software Engineer berpengalaman 5+ tahun dalam mengembangkan aplikasi web dan mobile. Memiliki keahlian dalam JavaScript, React, Node.js, dan cloud technologies. Passionate dalam menciptakan solusi teknologi yang scalable dan user-friendly.</textarea>
+                </div>
+
+                <!-- Pengalaman Kerja -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-200 fade-in">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="w-1 h-8 bg-purple-600 rounded mr-3"></div>
+                            <h2 class="text-2xl font-bold text-slate-800">Pengalaman Kerja</h2>
+                        </div>
+                        <button onclick="addExperience()" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition font-medium text-sm">+ Tambah</button>
+                    </div>
+                    <div id="experienceContainer" class="space-y-4"></div>
+                </div>
+
+                <!-- Pendidikan -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-200 fade-in">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="w-1 h-8 bg-orange-600 rounded mr-3"></div>
+                            <h2 class="text-2xl font-bold text-slate-800">Pendidikan</h2>
+                        </div>
+                        <button onclick="addEducation()" class="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition font-medium text-sm">+ Tambah</button>
+                    </div>
+                    <div id="educationContainer" class="space-y-4"></div>
+                </div>
+
+                <!-- Keahlian -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-200 fade-in">
+                    <div class="flex items-center mb-4">
+                        <div class="w-1 h-8 bg-pink-600 rounded mr-3"></div>
+                        <h2 class="text-2xl font-bold text-slate-800">Keahlian Teknis</h2>
+                    </div>
+                    <textarea id="skills" rows="3" placeholder="Pisahkan dengan koma" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition">JavaScript, React.js, Node.js, Python, SQL, Git, Docker, AWS, RESTful API, Agile/Scrum</textarea>
+                    <p class="text-xs text-slate-500 mt-2">💡 Tip: Sesuaikan dengan keywords di job description untuk ATS</p>
+                </div>
+
+                <!-- Soft Skills -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-200 fade-in">
+                    <div class="flex items-center mb-4">
+                        <div class="w-1 h-8 bg-indigo-600 rounded mr-3"></div>
+                        <h2 class="text-2xl font-bold text-slate-800">Soft Skills</h2>
+                    </div>
+                    <textarea id="softskills" rows="3" placeholder="Pisahkan dengan koma" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">Leadership, Communication, Problem Solving, Critical Thinking, Time Management, Teamwork, Adaptability, Conflict Resolution</textarea>
+                    <p class="text-xs text-slate-500 mt-2">💡 Tip: Tulis soft skills yang relevan dengan posisi yang dilamar</p>
+                </div>
+
+                <!-- Sertifikasi -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-200 fade-in">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="w-1 h-8 bg-teal-600 rounded mr-3"></div>
+                            <h2 class="text-2xl font-bold text-slate-800">Sertifikasi</h2>
+                        </div>
+                        <button onclick="addCertification()" class="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition font-medium text-sm">+ Tambah</button>
+                    </div>
+                    <div id="certificationContainer" class="space-y-4"></div>
+                </div>
+
+                <!-- Bahasa -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-200 fade-in">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="w-1 h-8 bg-cyan-600 rounded mr-3"></div>
+                            <h2 class="text-2xl font-bold text-slate-800">Bahasa</h2>
+                        </div>
+                        <button onclick="addLanguage()" class="px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition font-medium text-sm">+ Tambah</button>
+                    </div>
+                    <div id="languageContainer" class="space-y-4"></div>
+                </div>
+
+                <!-- Tombol Aksi -->
+                <div class="grid grid-cols-2 gap-4 sticky bottom-4">
+                    <button onclick="generateCV()" class="px-6 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 transition font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105">
+                        🚀 Generate CV
+                    </button>
+                    <button onclick="downloadCV()" class="px-6 py-4 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl hover:from-green-700 hover:to-green-800 transition font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105">
+                        📥 Download PDF
+                    </button>
+                </div>
+            </div>
+
+            <!-- CV Preview -->
+            <div class="lg:sticky lg:top-8 h-fit">
+                <div class="bg-white rounded-xl shadow-2xl overflow-hidden border border-slate-200">
+                    <div class="bg-gradient-to-r from-slate-700 to-slate-800 text-white px-6 py-4 no-print">
+                        <h3 class="text-xl font-bold">Preview CV</h3>
+                        <p class="text-sm text-slate-200">Format ATS-Friendly</p>
+                    </div>
+                    <div id="cvPreview" class="p-8 cv-preview bg-white" style="min-height: 500px;">
+                        <div class="text-center text-slate-400 py-20">
+                            <svg class="w-24 h-24 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            <p class="text-lg font-medium">Preview akan muncul di sini</p>
+                            <p class="text-sm mt-2">Klik "Generate CV" untuk melihat hasil</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let experienceCount = 0;
+        let educationCount = 0;
+        let certificationCount = 0;
+        let languageCount = 0;
+
+        function addExperience() {
+            experienceCount++;
+            const container = document.getElementById('experienceContainer');
+            const div = document.createElement('div');
+            div.className = 'p-4 border-2 border-slate-200 rounded-lg bg-slate-50 hover:border-purple-300 transition fade-in';
+            
+            let defaultValues = {};
+            if (experienceCount === 1) {
+                defaultValues = {
+                    company: 'PT Tech Indonesia',
+                    position: 'Senior Software Engineer',
+                    start: 'Januari 2021',
+                    end: 'Sekarang',
+                    desc: 'Memimpin tim pengembangan aplikasi e-commerce dengan 1M+ pengguna aktif\nMengimplementasikan microservices architecture yang meningkatkan performa 40%\nMengelola CI/CD pipeline dan deployment automation menggunakan Docker dan Kubernetes'
+                };
+            } else if (experienceCount === 2) {
+                defaultValues = {
+                    company: 'PT Digital Solusi',
+                    position: 'Software Engineer',
+                    start: 'Maret 2019',
+                    end: 'Desember 2020',
+                    desc: 'Mengembangkan dan maintain 5+ aplikasi web menggunakan React dan Node.js\nBerkolaborasi dengan tim product untuk mendesain fitur baru\nMelakukan code review dan mentoring junior developer'
+                };
+            }
+            
+            div.innerHTML = `
+                <div class="flex justify-between items-center mb-3">
+                    <span class="font-bold text-purple-700">Pengalaman #${experienceCount}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1 rounded transition font-medium">Hapus</button>
+                </div>
+                <div class="space-y-3">
+                    <input type="text" class="exp-company w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Nama Perusahaan" value="${defaultValues.company || ''}">
+                    <input type="text" class="exp-position w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Posisi" value="${defaultValues.position || ''}">
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="text" class="exp-start w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Mulai" value="${defaultValues.start || ''}">
+                        <input type="text" class="exp-end w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Selesai" value="${defaultValues.end || ''}">
+                    </div>
+                    <textarea class="exp-desc w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" rows="4" placeholder="Deskripsi (pisahkan dengan enter)">${defaultValues.desc || ''}</textarea>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
+        function addEducation() {
+            educationCount++;
+            const container = document.getElementById('educationContainer');
+            const div = document.createElement('div');
+            div.className = 'p-4 border-2 border-slate-200 rounded-lg bg-slate-50 hover:border-orange-300 transition fade-in';
+            
+            let defaultValues = {};
+            if (educationCount === 1) {
+                defaultValues = {
+                    school: 'Universitas Indonesia',
+                    degree: 'S1 Teknik Informatika',
+                    start: '2015',
+                    end: '2019'
+                };
+            }
+            
+            div.innerHTML = `
+                <div class="flex justify-between items-center mb-3">
+                    <span class="font-bold text-orange-700">Pendidikan #${educationCount}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1 rounded transition font-medium">Hapus</button>
+                </div>
+                <div class="space-y-3">
+                    <input type="text" class="edu-school w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="Nama Institusi" value="${defaultValues.school || ''}">
+                    <input type="text" class="edu-degree w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="Gelar/Jurusan" value="${defaultValues.degree || ''}">
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="text" class="edu-start w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="Tahun Mulai" value="${defaultValues.start || ''}">
+                        <input type="text" class="edu-end w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="Tahun Lulus" value="${defaultValues.end || ''}">
+                    </div>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
+        function addCertification() {
+            certificationCount++;
+            const container = document.getElementById('certificationContainer');
+            const div = document.createElement('div');
+            div.className = 'p-4 border-2 border-slate-200 rounded-lg bg-slate-50 hover:border-teal-300 transition fade-in';
+            
+            let defaultValues = {};
+            if (certificationCount === 1) {
+                defaultValues = {
+                    name: 'AWS Certified Solutions Architect',
+                    issuer: 'Amazon Web Services',
+                    year: '2023'
+                };
+            }
+            
+            div.innerHTML = `
+                <div class="flex justify-between items-center mb-3">
+                    <span class="font-bold text-teal-700">Sertifikasi #${certificationCount}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1 rounded transition font-medium">Hapus</button>
+                </div>
+                <div class="space-y-3">
+                    <input type="text" class="cert-name w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent" placeholder="Nama Sertifikasi" value="${defaultValues.name || ''}">
+                    <input type="text" class="cert-issuer w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent" placeholder="Penerbit" value="${defaultValues.issuer || ''}">
+                    <input type="text" class="cert-year w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent" placeholder="Tahun" value="${defaultValues.year || ''}">
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
+        function addLanguage() {
+            languageCount++;
+            const container = document.getElementById('languageContainer');
+            const div = document.createElement('div');
+            div.className = 'p-4 border-2 border-slate-200 rounded-lg bg-slate-50 hover:border-cyan-300 transition fade-in';
+            
+            let defaultValues = {};
+            if (languageCount === 1) {
+                defaultValues = {
+                    name: 'Bahasa Indonesia',
+                    level: 'Native'
+                };
+            } else if (languageCount === 2) {
+                defaultValues = {
+                    name: 'Bahasa Inggris',
+                    level: 'Fluent (TOEFL 550)'
+                };
+            }
+            
+            div.innerHTML = `
+                <div class="flex justify-between items-center mb-3">
+                    <span class="font-bold text-cyan-700">Bahasa #${languageCount}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1 rounded transition font-medium">Hapus</button>
+                </div>
+                <div class="space-y-3">
+                    <input type="text" class="lang-name w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent" placeholder="Nama Bahasa" value="${defaultValues.name || ''}">
+                    <input type="text" class="lang-level w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent" placeholder="Level (Native/Fluent/Intermediate/Basic)" value="${defaultValues.level || ''}">
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
+        function generateCV() {
+            const fullName = document.getElementById('fullName').value;
+            const jobTitle = document.getElementById('jobTitle').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const location = document.getElementById('location').value;
+            const linkedin = document.getElementById('linkedin').value;
+            const summary = document.getElementById('summary').value;
+            const skills = document.getElementById('skills').value;
+            const softskills = document.getElementById('softskills').value;
+
+            if (!fullName || !email || !phone) {
+                alert('⚠️ Mohon isi minimal Nama, Email, dan No. Telepon');
+                return;
+            }
+
+            let cvHTML = `
+<div style="font-family: Arial, sans-serif; line-height: 1.5; color: #000000; max-width: 800px; margin: 0 auto;">
+
+<!-- HEADER -->
+<div style="text-align: center; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #000000;">
+<h1 style="font-size: 26px; font-weight: bold; margin: 0 0 6px 0; color: #000000; text-transform: uppercase; letter-spacing: 0.5px;">${fullName}</h1>
+${jobTitle ? `<div style="font-size: 16px; font-weight: 600; margin-bottom: 10px; color: #1a1a1a;">${jobTitle}</div>` : ''}
+<div style="font-size: 12px; color: #000000; line-height: 1.6;">
+${email}${phone ? ' • ' + phone : ''}${location ? ' • ' + location : ''}
+${linkedin ? '<br>' + linkedin : ''}
+</div>
+</div>
+
+${summary ? `<!-- PROFESSIONAL SUMMARY -->
+<div style="margin-bottom: 20px;">
+<h2 style="font-size: 14px; font-weight: bold; margin: 0 0 10px 0; color: #000000; text-transform: uppercase; border-bottom: 1.5px solid #000000; padding-bottom: 3px; letter-spacing: 0.3px;">RINGKASAN PROFESIONAL</h2>
+<p style="margin: 0; font-size: 12px; color: #000000; line-height: 1.6; text-align: justify;">${summary}</p>
+</div>
+
+` : ''}${getExperienceHTML()}${getEducationHTML()}${skills ? `<!-- TECHNICAL SKILLS -->
+<div style="margin-bottom: 20px;">
+<h2 style="font-size: 14px; font-weight: bold; margin: 0 0 10px 0; color: #000000; text-transform: uppercase; border-bottom: 1.5px solid #000000; padding-bottom: 3px; letter-spacing: 0.3px;">KEAHLIAN TEKNIS</h2>
+<div style="font-size: 12px; color: #000000; line-height: 1.7;">
+${skills.split(',').map(skill => skill.trim()).join(' • ')}
+</div>
+</div>
+
+` : ''}${softskills ? `<!-- SOFT SKILLS -->
+<div style="margin-bottom: 20px;">
+<h2 style="font-size: 14px; font-weight: bold; margin: 0 0 10px 0; color: #000000; text-transform: uppercase; border-bottom: 1.5px solid #000000; padding-bottom: 3px; letter-spacing: 0.3px;">SOFT SKILLS</h2>
+<div style="font-size: 12px; color: #000000; line-height: 1.7;">
+${softskills.split(',').map(skill => skill.trim()).join(' • ')}
+</div>
+</div>
+
+` : ''}${getCertificationHTML()}${getLanguageHTML()}
+</div>
+            `;
+
+            document.getElementById('cvPreview').innerHTML = cvHTML;
+            
+            if (window.innerWidth < 1024) {
+                document.getElementById('cvPreview').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function getExperienceHTML() {
+            const experiences = document.querySelectorAll('#experienceContainer > div');
+            if (experiences.length === 0) return '';
+
+            let html = `<!-- WORK EXPERIENCE -->
+<div style="margin-bottom: 20px;">
+<h2 style="font-size: 14px; font-weight: bold; margin: 0 0 10px 0; color: #000000; text-transform: uppercase; border-bottom: 1.5px solid #000000; padding-bottom: 3px; letter-spacing: 0.3px;">PENGALAMAN KERJA</h2>
+`;
+            
+            experiences.forEach((exp, index) => {
+                const company = exp.querySelector('.exp-company').value;
+                const position = exp.querySelector('.exp-position').value;
+                const start = exp.querySelector('.exp-start').value;
+                const end = exp.querySelector('.exp-end').value;
+                const desc = exp.querySelector('.exp-desc').value;
+
+                if (company && position) {
+                    html += `<div style="margin-bottom: ${index === experiences.length - 1 ? '0' : '14px'};">
+<div style="margin-bottom: 3px;">
+<strong style="font-size: 13px; color: #000000; font-weight: bold;">${position}</strong>
+<span style="font-size: 11px; color: #000000; margin-left: 8px;">${start}${end ? ' - ' + end : ''}</span>
+</div>
+<div style="font-size: 12px; color: #000000; font-style: italic; margin-bottom: 5px;">${company}</div>
+${desc ? desc.split('\n').filter(d => d.trim()).map(d => `<div style="font-size: 12px; color: #000000; margin-left: 15px; margin-bottom: 3px; line-height: 1.5;">• ${d.trim()}</div>`).join('') : ''}
+</div>
+`;
+                }
+            });
+
+            html += `</div>
+
+`;
+            return html;
+        }
+
+        function getEducationHTML() {
+            const educations = document.querySelectorAll('#educationContainer > div');
+            if (educations.length === 0) return '';
+
+            let html = `<!-- EDUCATION -->
+<div style="margin-bottom: 20px;">
+<h2 style="font-size: 14px; font-weight: bold; margin: 0 0 10px 0; color: #000000; text-transform: uppercase; border-bottom: 1.5px solid #000000; padding-bottom: 3px; letter-spacing: 0.3px;">PENDIDIKAN</h2>
+`;
+            
+            educations.forEach((edu, index) => {
+                const school = edu.querySelector('.edu-school').value;
+                const degree = edu.querySelector('.edu-degree').value;
+                const start = edu.querySelector('.edu-start').value;
+                const end = edu.querySelector('.edu-end').value;
+
+                if (school && degree) {
+                    html += `<div style="margin-bottom: ${index === educations.length - 1 ? '0' : '10px'};">
+<div style="margin-bottom: 2px;">
+<strong style="font-size: 13px; font-weight: bold; color: #000000;">${degree}</strong>
+<span style="font-size: 11px; color: #000000; margin-left: 8px;">${start}${end ? ' - ' + end : ''}</span>
+</div>
+<div style="font-size: 12px; color: #000000; font-style: italic;">${school}</div>
+</div>
+`;
+                }
+            });
+
+            html += `</div>
+
+`;
+            return html;
+        }
+
+        function getCertificationHTML() {
+            const certifications = document.querySelectorAll('#certificationContainer > div');
+            if (certifications.length === 0) return '';
+
+            let html = `<!-- CERTIFICATIONS -->
+<div style="margin-bottom: 20px;">
+<h2 style="font-size: 14px; font-weight: bold; margin: 0 0 10px 0; color: #000000; text-transform: uppercase; border-bottom: 1.5px solid #000000; padding-bottom: 3px; letter-spacing: 0.3px;">SERTIFIKASI</h2>
+`;
+            
+            certifications.forEach((cert, index) => {
+                const name = cert.querySelector('.cert-name').value;
+                const issuer = cert.querySelector('.cert-issuer').value;
+                const year = cert.querySelector('.cert-year').value;
+
+                if (name) {
+                    html += `<div style="margin-bottom: 6px; font-size: 12px; color: #000000; line-height: 1.5;">
+<strong style="font-weight: 600;">${name}</strong>${issuer ? ' - ' + issuer : ''}${year ? ' (' + year + ')' : ''}
+</div>
+`;
+                }
+            });
+
+            html += `</div>
+
+`;
+            return html;
+        }
+
+        function getLanguageHTML() {
+            const languages = document.querySelectorAll('#languageContainer > div');
+            if (languages.length === 0) return '';
+
+            let html = `<!-- LANGUAGES -->
+<div style="margin-bottom: 20px;">
+<h2 style="font-size: 14px; font-weight: bold; margin: 0 0 10px 0; color: #000000; text-transform: uppercase; border-bottom: 1.5px solid #000000; padding-bottom: 3px; letter-spacing: 0.3px;">BAHASA</h2>
+`;
+            
+            languages.forEach((lang, index) => {
+                const name = lang.querySelector('.lang-name').value;
+                const level = lang.querySelector('.lang-level').value;
+
+                if (name) {
+                    html += `<div style="margin-bottom: 6px; font-size: 12px; color: #000000; line-height: 1.5;">
+<strong style="font-weight: 600;">${name}</strong>${level ? ' - ' + level : ''}
+</div>
+`;
+                }
+            });
+
+            html += `</div>
+`;
+            return html;
+        }
+
+        function downloadCV() {
+            const preview = document.getElementById('cvPreview');
+            if (preview.textContent.includes('Preview akan muncul')) {
+                alert('⚠️ Silakan generate CV terlebih dahulu');
+                return;
+            }
+            window.print();
+        }
+
+        // Initialize with default data
+        window.addEventListener('DOMContentLoaded', function() {
+            addExperience();
+            addExperience();
+            addEducation();
+            addCertification();
+            addLanguage();
+            addLanguage();
+            
+            // Auto-generate on load
+            setTimeout(() => {
+                generateCV();
+            }, 300);
+        });
+    </script>
+</body>
+</html>

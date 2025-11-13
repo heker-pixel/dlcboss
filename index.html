@@ -9,10 +9,11 @@
         @media print {
             .no-print { display: none !important; }
             body { margin: 0; padding: 0; background: white; }
-            .cv-preview { 
+            #cvPreview { 
                 box-shadow: none !important; 
+                border: none !important;
                 margin: 0 !important; 
-                padding: 20mm !important;
+                padding: 15mm !important;
                 max-width: 100% !important;
             }
             * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
@@ -25,6 +26,21 @@
             to { opacity: 1; transform: translateY(0); }
         }
         .fade-in { animation: fadeIn 0.3s ease-out; }
+        
+        /* Preview container dengan styling */
+        .preview-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e2e8f0;
+            padding: 40px;
+            min-height: 500px;
+        }
+        
+        /* CV content yang clean untuk generate */
+        .cv-content {
+            background: white;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen">
@@ -169,7 +185,7 @@
                         <h3 class="text-xl font-bold">Preview CV</h3>
                         <p class="text-sm text-slate-200">Format ATS-Friendly</p>
                     </div>
-                    <div id="cvPreview" class="p-8 cv-preview bg-white" style="min-height: 500px;">
+                    <div id="cvPreview" class="preview-container">
                         <div class="text-center text-slate-400 py-20">
                             <svg class="w-24 h-24 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -342,8 +358,9 @@
                 return;
             }
 
+            // CV Content - Pure clean HTML tanpa styling container
             let cvHTML = `
-<div style="font-family: Arial, sans-serif; line-height: 1.5; color: #000000; max-width: 800px; margin: 0 auto;">
+<div class="cv-content" style="font-family: Arial, sans-serif; line-height: 1.5; color: #000000;">
 
 <!-- HEADER -->
 <div style="text-align: center; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #000000;">
